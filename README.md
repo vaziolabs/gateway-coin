@@ -2,6 +2,10 @@
 
 Gateway Token is a protocol-agnostic cross-chain bridge enabling seamless asset transfers and interoperability between multiple blockchain networks, built on the FragMint Chain infrastructure.
 
+# Integration
+![image](https://github.com/user-attachments/assets/d196fc1d-d6d0-4724-9533-3bf5e3a94bb2)
+
+
 ## Token Economics & Governance
 
 ### Token Fundamentals
