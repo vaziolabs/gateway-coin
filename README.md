@@ -1,97 +1,135 @@
-# Gateway Coin (GATE)
+# Gateway Token (GATE)
 
-Gateway Coin serves as the intermediary token for cross-chain financial transactions, enabling seamless integration between multiple blockchain networks and the FragMint ecosystem.
+Gateway Token is a protocol-agnostic cross-chain bridge enabling seamless asset transfers and interoperability between multiple blockchain networks, built on the FragMint Chain infrastructure.
 
-## Purpose
+## System Architecture
 
-- Acts as a bridge token for cross-chain transactions
-- Facilitates automated financial contract execution
-- Enables interoperability between major blockchain networks
-- Provides liquidity for asset tokenization and exchange
+### Application Layer
+- Scarab UI interface for user interactions
+- Token operation management
+- User-friendly bridge interface
 
-## Core Integration Points
+### OS Layer
 
-### 1. Blockchain Network Integration
-- Ethereum (ETH)
-  - Smart contract integration for financial assets (ERC-20)
-  - NFT and multi-token support (ERC-721, ERC-1155)
-  - Tangible asset management
-  - Account management protocols
-- Bitcoin (BTC)
-  - Payment channel integration
-  - Cross-chain atomic swaps
-- Additional Networks
-  - Solana (SPL Token integration)
-  - Polygon (ERC compatibility layer)
-  - 0x Protocol (DEX integration)
+#### Blockchain Layer
+1. **FragMint Chain**
+   - Core chain for GATE token operations
+   - Handles financial operations
+   - API handler for external interactions
 
-### 2. FragMint Integration
-- Primary state management and contract execution layer
-- Real-world asset tokenization protocols
-- Multi-token validation and tracking
-- Cross-chain state synchronization
-- Asset wrapper contracts for external tokens
+2. **Gateway Token Bridge**
+   - Central bridge infrastructure
+   - Asset locking and release mechanisms
+   - Cross-chain state management
 
-### 3. Cross-Chain Bridge Architecture
-- Token Wrapping Mechanisms
-  - ERC-20 wrapping protocols
-  - NFT bridging (ERC-721, ERC-1155)
-  - Custom asset wrapper contracts
-- State Management
-  - FragMint-based state verification
-  - Cross-chain merkle proofs
-  - Multi-signature validation
-- Bridge Security
-  - Validator networks
-  - Threshold signatures
-  - Time-locked security mechanisms
+3. **Cross-Chain Router**
+   - Manages routing between different chains
+   - Protocol-specific bridge implementations
+   - Transaction verification and routing
 
-## Implementation Roadmap
+#### Network Layer
+1. **STOQ Protocol Handler**
+   - Secure transaction routing
+   - Certificate management
+   - Network security implementation
 
-1. Token Development
-   - Create base ERC-20 compatible token contract
-   - Implement ERC-721 and ERC-1155 bridge contracts
-   - Develop atomic swap protocols
-   - Create asset wrapper contracts for cross-chain tokens
+2. **Decentralized CA**
+   - Certificate issuance and verification
+   - Security credential management
+   - Cross-chain identity verification
 
-2. Network Integration
-   - Deploy bridge contracts on target networks
-   - Implement network-specific adapters
-   - Set up cross-chain validation mechanisms
-   - Develop FragMint state management contracts
-   - Create real-world asset integration protocols
+3. **STOQ Network**
+   - Secure channel implementation
+   - Network consensus
+   - Cross-chain message passing
 
-3. Exchange Integration
-   - Develop liquidity pools
-   - Implement automated market makers
-   - Create exchange interfaces
+### Supported Chains and Protocols
+1. **GATE Token Implementation**
+   - Native Solana integration
+   - FragMint Chain base implementation
 
-4. Security & Compliance
-   - Security audit implementation
-   - Regulatory compliance integration
-   - Transaction monitoring systems
+2. **ERC Standards Support**
+   - Ethereum integration
+   - ERC20/721/1155 compatibility
 
-5. Testing & Deployment
-   - Testnet deployment
-   - Security testing
-   - Performance optimization
-   - Mainnet launch
+3. **Bridge Implementations**
+   - GATE Bridge for standard transfers
+   - BTC Bridge for Bitcoin integration
+   - Protocol Bridge for 0x Protocol
 
-## Technical Architecture
+4. **Supported Networks**
+   - Solana (SPL Token support)
+   - Ethereum (ERC standard support)
+   - Polygon (ERC compatibility)
+   - Bitcoin (Native integration)
+   - 0x Protocol (DEX integration)
 
-The Gateway Token operates through:
-- Smart contracts for cross-chain bridges
-- Liquidity pools for exchange operations
-- Bridge validators for transaction verification
-- State channels for rapid settlement
+## Token Operations Flow
 
-## Integration APIs
+```typescript
+interface GatewayOperations {
+    // FragMint Chain Operations
+    initiateTransfer(
+        sourceChain: ChainId,
+        targetChain: ChainId,
+        amount: BigNumber
+    ): Promise<TransferOperation>;
 
-Gateway Token will expose APIs for:
-- Transaction processing
-- Cross-chain transfers
-- Asset management
-- Exchange operations
-- Contract execution
+    // Cross-Chain Router Operations
+    routeTransaction(
+        operation: TransferOperation,
+        bridgeType: BridgeProtocol
+    ): Promise<BridgeTransaction>;
 
-Note: This document focuses specifically on Gateway Token implementation and direct integration points with FragMint and Scarab. For detailed information about FragMint blockchain or Scarab interface implementations, please refer to their respective documentation.
+    // STOQ Protocol Operations
+    secureTransfer(
+        transaction: BridgeTransaction,
+        certificate: SecurityCertificate
+    ): Promise<SecureChannelResponse>;
+}
+```
+
+## Security Architecture
+
+### STOQ Protocol Integration
+- Certificate-based security
+- Secure channel communication
+- Decentralized authority validation
+
+### Bridge Security
+- Multi-layer verification
+- Cross-chain state validation
+- Protocol-specific security measures
+
+## Network Communication
+
+### API Handler
+- RESTful API endpoints
+- Real-time transaction status
+- Cross-chain state queries
+
+### Bridge Operations
+- Asset locking mechanisms
+- Cross-chain message passing
+- State synchronization
+
+## Integration Benefits
+1. **Unified Architecture**
+   - Centralized bridge management
+   - Standardized security protocols
+   - Consistent API interface
+
+2. **Multi-Chain Support**
+   - Native chain integrations
+   - Protocol-specific bridges
+   - Extensible architecture
+
+3. **Security First**
+   - STOQ Protocol security
+   - Certificate-based validation
+   - Secure channel communication
+
+4. **Performance Optimized**
+   - Efficient routing
+   - Optimized state management
+   - Quick finality
