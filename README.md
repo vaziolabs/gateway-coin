@@ -81,6 +81,9 @@ Gateway Token is a protocol-agnostic cross-chain bridge enabling seamless asset 
    - Polygon (ERC compatibility)
    - Bitcoin (Native integration)
    - 0x Protocol (DEX integration)
+   - NEAR Protocol (NEP-141 support)
+   - Radix (XRD native asset support)
+   - Cosmos/ATOM (IBC protocol integration)
 
 ### Token Operations Layer
 1. **GATE Token Mechanics**
@@ -94,6 +97,9 @@ Gateway Token is a protocol-agnostic cross-chain bridge enabling seamless asset 
    - GATE token conversion rates
    - Liquidity pool management
    - Transaction batching
+   - NEAR Rainbow Bridge integration
+   - Radix Component-based bridge operations
+   - IBC protocol handlers for Cosmos/ATOM
 
 3. **Validator Operations**
    - Stake management
@@ -231,6 +237,33 @@ interface IGATEIntegration {
         address recipient,
         uint256 amount,
         bytes calldata withdrawData
+    ) external returns (bool);
+}
+
+// NEAR integration interface
+interface INEARGateIntegration {
+    function integrateNEARGate(
+        string calldata accountId,
+        uint128 amount,
+        string calldata integrationData
+    ) external returns (bool);
+}
+
+// Radix integration interface
+interface IRadixGateIntegration {
+    function integrateRadixGate(
+        Address componentAddress,
+        Bucket tokens,
+        bytes calldata integrationData
+    ) external returns (bool);
+}
+
+// Cosmos/ATOM integration interface
+interface ICosmosGateIntegration {
+    function integrateCosmosGate(
+        string calldata channelId,
+        uint256 amount,
+        bytes calldata integrationData
     ) external returns (bool);
 }
 ```
