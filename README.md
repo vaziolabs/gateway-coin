@@ -202,38 +202,44 @@ to install Solana we need to ensure protobuf is installed, as well as the solana
 
 ### Economic Equilibrium Model
 
-#### Holding Cost Formula
-For non-participating holders:
+#### Transaction Spread Formula
 ```
-D(t) = P₀(1 - re^(-kt))
+S(v) = β * (1/L)
 
 Where:
-D(t) = Token value after time t
-P₀ = Initial token value (1 USDC)
-r = Base decay rate (0.02)
-k = Time constant (epochs)
-t = Holding duration in epochs
+S(v) = Spread per transaction
+β = Base spread rate (e.g., 0.001)
+L = Current liquidity ratio
 ```
 
-#### Network Participation Offset
-For active participants:
+#### Network Participant Share
 ```
-R(v,t) = P₀(αv + βn)t
+R(p,v) = S(v) * (p/P)
 
 Where:
-R(v,t) = Rewards over time t
-v = Transaction volume
-α = Volume coefficient (0.001)
-β = Network participation factor
-n = Number of network operations
+R(p,v) = Reward per participant
+p = Individual participant's transaction volume
+P = Total network transaction volume
+```
+
+#### Holding Cost (Anti-Speculation)
+```
+D(t,L) = H * (1/L) * t
+
+Where:
+D(t,L) = Decay cost
+H = Base holding rate (smaller than transaction spread)
+L = Liquidity ratio
+t = Time held without transactions
 ```
 
 #### Net Position Formula
 ```
-NP(t) = P₀ + R(v,t) - D(t)
+NP = Tv * S(v) - D(t,L)
 
-Participation Threshold:
-R(v,t) ≥ D(t) for economic neutrality
+Where:
+Tv = Transaction volume
+Must satisfy: NP = 0 when price = $1 and volume > 0
 ```
 
 ### Stability Mechanics
@@ -306,3 +312,92 @@ RR = Required reserve
 - Real-time participation metrics influence reward distribution
 - Cross-chain operations must maintain consistent reward/decay ratios
 - Tensor epochs synchronize reward and decay calculations
+
+### Real-World Examples
+
+#### 1. Transaction Spread Example
+```
+S(v) = β * (1/L)
+β = 0.001 (0.1% base spread)
+
+Scenario A (High Liquidity):
+L = 0.9 (90% of tokens actively used)
+S(v) = 0.001 * (1/0.9) = 0.00111
+→ 0.111% spread per transaction
+
+Scenario B (Low Liquidity):
+L = 0.5 (50% of tokens actively used)
+S(v) = 0.001 * (1/0.5) = 0.002
+→ 0.2% spread per transaction
+```
+
+#### 2. Network Participant Share Example
+```
+R(p,v) = S(v) * (p/P)
+
+Example with $1M daily volume:
+Total network volume (P) = $1,000,000
+Spread (S(v)) = 0.00111 (from high liquidity scenario)
+
+Participant A (Large):
+p = $100,000 (10% of volume)
+R = 0.00111 * (100,000/1,000,000)
+→ $0.111 per $1,000 traded
+→ Daily earnings = $11.10
+
+Participant B (Small):
+p = $1,000 (0.1% of volume)
+R = 0.00111 * (1,000/1,000,000)
+→ $0.111 per $1,000 traded
+→ Daily earnings = $0.111
+```
+
+#### 3. Holding Cost Example
+```
+D(t,L) = H * (1/L) * t
+H = 0.0005 (0.05% base holding rate)
+t = days held
+
+High Liquidity (L = 0.9):
+1 day hold: D = 0.0005 * (1/0.9) * 1 = 0.00056 (0.056%)
+7 day hold: D = 0.0005 * (1/0.9) * 7 = 0.00389 (0.389%)
+
+Low Liquidity (L = 0.5):
+1 day hold: D = 0.0005 * (1/0.5) * 1 = 0.001 (0.1%)
+7 day hold: D = 0.0005 * (1/0.5) * 7 = 0.007 (0.7%)
+```
+
+#### 4. Net Position Example
+```
+NP = Tv * S(v) - D(t,L)
+
+Active Trader Example:
+Daily volume (Tv) = $10,000
+Spread (S(v)) = 0.00111
+Holding time = 1 day
+L = 0.9
+
+Revenue = $10,000 * 0.00111 = $11.10
+Holding cost = $10,000 * 0.00056 = $5.60
+Net Position = $11.10 - $5.60 = $5.50 profit
+
+Inactive Holder Example:
+Daily volume (Tv) = $0
+Holding time = 7 days
+L = 0.9
+
+Revenue = $0 * 0.00111 = $0
+Holding cost = $10,000 * 0.00389 = $38.90
+Net Position = $0 - $38.90 = -$38.90 loss
+```
+
+### Key Observations:
+1. Active traders can profit from spreads (similar to how Visa merchants receive a portion of transaction fees)
+2. Higher liquidity leads to lower spreads and holding costs
+3. Holding without trading becomes increasingly expensive
+4. The system encourages frequent transactions and discourages hoarding
+5. With $1M daily volume, the system generates about $1,110 in daily spreads ($405,150 annually) to be shared among participants
+
+This creates a sustainable model where:
+- Active participants are rewarded (like payment processors)
+- Holding
