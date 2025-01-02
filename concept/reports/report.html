@@ -1,0 +1,658 @@
+
+    <html>
+    <head>
+        <title>Stability Analysis Report - 20250101_225627</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                margin: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .tabs {
+                display: flex;
+                cursor: pointer;
+                margin-bottom: 20px;
+            }
+            .tab {
+                padding: 10px 20px;
+                background-color: #f8f9fa;
+                border: 1px solid #ddd;
+                border-radius: 5px 5px 0 0;
+                margin-right: 5px;
+            }
+            .tab.active {
+                background-color: #fff;
+                border-bottom: none;
+            }
+            .tab-content {
+                display: none;
+                border: 1px solid #ddd;
+                border-radius: 0 5px 5px 5px;
+                padding: 20px;
+                background-color: #fff;
+            }
+            .tab-content.active {
+                display: block;
+            }
+            .metric-table { 
+                border-collapse: collapse; 
+                width: 100%;
+                margin: 20px 0;
+            }
+            .metric-table td, .metric-table th { 
+                border: 1px solid #ddd; 
+                padding: 12px; 
+            }
+            .metric-table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+            .metric-table tr:nth-child(even) { 
+                background-color: #f2f2f2; 
+            }
+            .alert { 
+                color: #dc3545;
+                font-weight: bold;
+            }
+            .success { 
+                color: #28a745;
+                font-weight: bold;
+            }
+            .section {
+                margin: 30px 0;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            h1, h2, h3 {
+                color: #333;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Show first tab by default
+                document.querySelector('.tab').classList.add('active');
+                document.querySelector('.tab-content').style.display = 'block';
+            });
+
+            function openTab(evt, tabName) {
+                // Hide all tab content
+                var tabcontent = document.getElementsByClassName("tab-content");
+                for (var i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Remove active class from all tabs
+                var tablinks = document.getElementsByClassName("tab");
+                for (var i = 0; i < tablinks.length; i++) {
+                    tablinks[i].classList.remove("active");
+                }
+
+                // Show the selected tab content and mark tab as active
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.classList.add("active");
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Stability Analysis Report</h1>
+        <h2>Generated: 2025-01-01 22:56:30</h2>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="openTab(event, 'Overview')">Overview</div>
+            <div class="tab" onclick="openTab(event, 'Stable - More Transactions Than Validators')">Stable - More Transactions Than Validators</div><div class="tab" onclick="openTab(event, 'Stable - More Holders Than Transactions')">Stable - More Holders Than Transactions</div><div class="tab" onclick="openTab(event, 'Stable - More Validators Than Transactions')">Stable - More Validators Than Transactions</div><div class="tab" onclick="openTab(event, 'High Pressure - More Transactions Than Validators')">High Pressure - More Transactions Than Validators</div><div class="tab" onclick="openTab(event, 'High Pressure - More Holders Than Transactions')">High Pressure - More Holders Than Transactions</div><div class="tab" onclick="openTab(event, 'High Pressure - More Validators Than Transactions')">High Pressure - More Validators Than Transactions</div><div class="tab" onclick="openTab(event, 'Crisis - More Transactions Than Validators')">Crisis - More Transactions Than Validators</div><div class="tab" onclick="openTab(event, 'Crisis - More Holders Than Transactions')">Crisis - More Holders Than Transactions</div><div class="tab" onclick="openTab(event, 'Crisis - More Validators Than Transactions')">Crisis - More Validators Than Transactions</div><div class="tab" onclick="openTab(event, 'Recovery - More Transactions Than Validators')">Recovery - More Transactions Than Validators</div><div class="tab" onclick="openTab(event, 'Recovery - More Holders Than Transactions')">Recovery - More Holders Than Transactions</div><div class="tab" onclick="openTab(event, 'Recovery - More Validators Than Transactions')">Recovery - More Validators Than Transactions</div>
+        </div>
+        
+        <div id="Overview" class="tab-content active">
+            <h3>Simulation Summary</h3>
+            <table border="1" class="dataframe metric-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>scenario_name</th>
+      <th>epochs</th>
+      <th>avg_epoch_duration</th>
+      <th>price_stability_index_mean</th>
+      <th>price_stability_index_min</th>
+      <th>price_stability_index_max</th>
+      <th>price_stability_index_std</th>
+      <th>network_utility_score_mean</th>
+      <th>network_utility_score_min</th>
+      <th>network_utility_score_max</th>
+      <th>network_utility_score_std</th>
+      <th>liquidity_health_index_mean</th>
+      <th>liquidity_health_index_min</th>
+      <th>liquidity_health_index_max</th>
+      <th>liquidity_health_index_std</th>
+      <th>market_pressure_mean</th>
+      <th>market_pressure_min</th>
+      <th>market_pressure_max</th>
+      <th>market_pressure_std</th>
+      <th>convergence_rate_mean</th>
+      <th>convergence_rate_min</th>
+      <th>convergence_rate_max</th>
+      <th>convergence_rate_std</th>
+      <th>dynamic_spread_mean</th>
+      <th>dynamic_spread_min</th>
+      <th>dynamic_spread_max</th>
+      <th>dynamic_spread_std</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Stable - More Transactions Than Validators</td>
+      <td>10040</td>
+      <td>8.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>0.971905</td>
+      <td>0.293636</td>
+      <td>1.000000</td>
+      <td>0.114470</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.000000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Stable - More Holders Than Transactions</td>
+      <td>10040</td>
+      <td>8.000000</td>
+      <td>0.997566</td>
+      <td>0.804217</td>
+      <td>1.000000</td>
+      <td>0.018451</td>
+      <td>0.971905</td>
+      <td>0.293636</td>
+      <td>1.000000</td>
+      <td>0.114470</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.002006</td>
+      <td>0.002000</td>
+      <td>0.002487</td>
+      <td>0.000044</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Stable - More Validators Than Transactions</td>
+      <td>10040</td>
+      <td>10.000000</td>
+      <td>0.799220</td>
+      <td>0.721077</td>
+      <td>0.801014</td>
+      <td>0.008118</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.353935</td>
+      <td>0.200000</td>
+      <td>0.359173</td>
+      <td>0.019301</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.001251</td>
+      <td>0.001248</td>
+      <td>0.001387</td>
+      <td>0.000014</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>High Pressure - More Transactions Than Validators</td>
+      <td>10040</td>
+      <td>8.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>0.974378</td>
+      <td>0.322201</td>
+      <td>1.000000</td>
+      <td>0.107348</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.003025</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.049389</td>
+      <td>0.010353</td>
+      <td>0.009914</td>
+      <td>0.800000</td>
+      <td>0.008958</td>
+      <td>0.001295</td>
+      <td>0.001295</td>
+      <td>0.001778</td>
+      <td>0.000008</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>High Pressure - More Holders Than Transactions</td>
+      <td>10040</td>
+      <td>9.989641</td>
+      <td>0.791434</td>
+      <td>0.558806</td>
+      <td>0.801049</td>
+      <td>0.029035</td>
+      <td>0.200165</td>
+      <td>0.200000</td>
+      <td>0.313737</td>
+      <td>0.003553</td>
+      <td>0.295980</td>
+      <td>0.200000</td>
+      <td>0.307747</td>
+      <td>0.030044</td>
+      <td>0.002790</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.046965</td>
+      <td>0.013215</td>
+      <td>0.012376</td>
+      <td>1.252670</td>
+      <td>0.014172</td>
+      <td>0.001293</td>
+      <td>0.001293</td>
+      <td>0.001515</td>
+      <td>0.000003</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>High Pressure - More Validators Than Transactions</td>
+      <td>10040</td>
+      <td>10.000000</td>
+      <td>0.798513</td>
+      <td>0.505625</td>
+      <td>0.801348</td>
+      <td>0.018365</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.303129</td>
+      <td>0.200000</td>
+      <td>0.357635</td>
+      <td>0.011197</td>
+      <td>0.003393</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>0.052970</td>
+      <td>0.017007</td>
+      <td>0.012393</td>
+      <td>0.988875</td>
+      <td>0.048384</td>
+      <td>0.001306</td>
+      <td>0.001306</td>
+      <td>0.001306</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Crisis - More Transactions Than Validators</td>
+      <td>10040</td>
+      <td>8.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>0.976616</td>
+      <td>0.349348</td>
+      <td>1.000000</td>
+      <td>0.100723</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>-0.003016</td>
+      <td>-1.000000</td>
+      <td>-0.000000</td>
+      <td>0.049380</td>
+      <td>0.010332</td>
+      <td>0.009914</td>
+      <td>0.600000</td>
+      <td>0.007264</td>
+      <td>0.001355</td>
+      <td>0.001295</td>
+      <td>0.028444</td>
+      <td>0.000941</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Crisis - More Holders Than Transactions</td>
+      <td>10040</td>
+      <td>9.985458</td>
+      <td>0.790428</td>
+      <td>0.568175</td>
+      <td>0.801050</td>
+      <td>0.030449</td>
+      <td>0.200258</td>
+      <td>0.200000</td>
+      <td>0.343355</td>
+      <td>0.004982</td>
+      <td>0.297583</td>
+      <td>0.200000</td>
+      <td>0.310686</td>
+      <td>0.032328</td>
+      <td>-0.002901</td>
+      <td>-1.000000</td>
+      <td>-0.000000</td>
+      <td>0.048211</td>
+      <td>0.013236</td>
+      <td>0.012376</td>
+      <td>1.232015</td>
+      <td>0.014015</td>
+      <td>0.001298</td>
+      <td>0.001269</td>
+      <td>0.016000</td>
+      <td>0.000496</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Crisis - More Validators Than Transactions</td>
+      <td>10040</td>
+      <td>10.000000</td>
+      <td>0.799103</td>
+      <td>0.539000</td>
+      <td>0.801787</td>
+      <td>0.015330</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.304394</td>
+      <td>0.200000</td>
+      <td>0.411242</td>
+      <td>0.010304</td>
+      <td>-0.003925</td>
+      <td>-1.000000</td>
+      <td>-0.000000</td>
+      <td>0.057817</td>
+      <td>0.016903</td>
+      <td>0.012393</td>
+      <td>0.927644</td>
+      <td>0.046939</td>
+      <td>0.001322</td>
+      <td>0.001306</td>
+      <td>0.010240</td>
+      <td>0.000289</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Recovery - More Transactions Than Validators</td>
+      <td>10040</td>
+      <td>8.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+      <td>0.973658</td>
+      <td>0.313737</td>
+      <td>1.000000</td>
+      <td>0.109442</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.003623</td>
+      <td>0.001876</td>
+      <td>0.990917</td>
+      <td>0.034314</td>
+      <td>0.010078</td>
+      <td>0.010015</td>
+      <td>0.039818</td>
+      <td>0.001054</td>
+      <td>0.001138</td>
+      <td>0.001138</td>
+      <td>0.001138</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Recovery - More Holders Than Transactions</td>
+      <td>10040</td>
+      <td>9.989044</td>
+      <td>0.791157</td>
+      <td>0.619449</td>
+      <td>0.801050</td>
+      <td>0.028886</td>
+      <td>0.200139</td>
+      <td>0.200000</td>
+      <td>0.304300</td>
+      <td>0.003132</td>
+      <td>0.294143</td>
+      <td>0.200000</td>
+      <td>0.306219</td>
+      <td>0.030262</td>
+      <td>0.001605</td>
+      <td>0.000021</td>
+      <td>0.977062</td>
+      <td>0.031763</td>
+      <td>0.012775</td>
+      <td>0.012398</td>
+      <td>0.094776</td>
+      <td>0.003100</td>
+      <td>0.001306</td>
+      <td>0.001306</td>
+      <td>0.001306</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Recovery - More Validators Than Transactions</td>
+      <td>10040</td>
+      <td>10.000000</td>
+      <td>0.798031</td>
+      <td>0.592116</td>
+      <td>0.802565</td>
+      <td>0.020616</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.200000</td>
+      <td>0.000000</td>
+      <td>0.839907</td>
+      <td>0.200000</td>
+      <td>0.854908</td>
+      <td>0.067649</td>
+      <td>0.999822</td>
+      <td>0.999822</td>
+      <td>0.999937</td>
+      <td>0.000001</td>
+      <td>0.024830</td>
+      <td>0.024669</td>
+      <td>0.033776</td>
+      <td>0.000820</td>
+      <td>0.001247</td>
+      <td>0.001000</td>
+      <td>0.001250</td>
+      <td>0.000029</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        
+        <div id="Stable - More Transactions Than Validators" class="tab-content">
+            <h3>Stable - More Transactions Than Validators</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Stable_-_More_Transactions_Than_Validators/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Stable_-_More_Transactions_Than_Validators/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Stable_-_More_Transactions_Than_Validators/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Stable - More Holders Than Transactions" class="tab-content">
+            <h3>Stable - More Holders Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Stable_-_More_Holders_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Stable_-_More_Holders_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Stable_-_More_Holders_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Stable - More Validators Than Transactions" class="tab-content">
+            <h3>Stable - More Validators Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Stable_-_More_Validators_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Stable_-_More_Validators_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Stable_-_More_Validators_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="High Pressure - More Transactions Than Validators" class="tab-content">
+            <h3>High Pressure - More Transactions Than Validators</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="High_Pressure_-_More_Transactions_Than_Validators/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="High_Pressure_-_More_Transactions_Than_Validators/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="High_Pressure_-_More_Transactions_Than_Validators/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="High Pressure - More Holders Than Transactions" class="tab-content">
+            <h3>High Pressure - More Holders Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="High_Pressure_-_More_Holders_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="High_Pressure_-_More_Holders_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="High_Pressure_-_More_Holders_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="High Pressure - More Validators Than Transactions" class="tab-content">
+            <h3>High Pressure - More Validators Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="High_Pressure_-_More_Validators_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="High_Pressure_-_More_Validators_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="High_Pressure_-_More_Validators_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Crisis - More Transactions Than Validators" class="tab-content">
+            <h3>Crisis - More Transactions Than Validators</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Crisis_-_More_Transactions_Than_Validators/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Crisis_-_More_Transactions_Than_Validators/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Crisis_-_More_Transactions_Than_Validators/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Crisis - More Holders Than Transactions" class="tab-content">
+            <h3>Crisis - More Holders Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Crisis_-_More_Holders_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Crisis_-_More_Holders_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Crisis_-_More_Holders_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Crisis - More Validators Than Transactions" class="tab-content">
+            <h3>Crisis - More Validators Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Crisis_-_More_Validators_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Crisis_-_More_Validators_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Crisis_-_More_Validators_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Recovery - More Transactions Than Validators" class="tab-content">
+            <h3>Recovery - More Transactions Than Validators</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Recovery_-_More_Transactions_Than_Validators/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Recovery_-_More_Transactions_Than_Validators/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Recovery_-_More_Transactions_Than_Validators/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Recovery - More Holders Than Transactions" class="tab-content">
+            <h3>Recovery - More Holders Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Recovery_-_More_Holders_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Recovery_-_More_Holders_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Recovery_-_More_Holders_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+        <div id="Recovery - More Validators Than Transactions" class="tab-content">
+            <h3>Recovery - More Validators Than Transactions</h3>
+            <div class="section">
+                <h3>Stability Metrics</h3>
+                <img src="Recovery_-_More_Validators_Than_Transactions/stability_metrics.png" alt="Stability Metrics">
+                <h3>Market Conditions</h3>
+                <img src="Recovery_-_More_Validators_Than_Transactions/market_conditions.png" alt="Market Conditions">
+                <h3>Economic Impacts</h3>
+                <img src="Recovery_-_More_Validators_Than_Transactions/economic_impacts.png" alt="Economic Impacts">
+            </div>
+        </div>
+        
+    </body>
+    </html>
+    
